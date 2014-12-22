@@ -25,6 +25,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -109,7 +110,7 @@ public class MapsActivity extends FragmentActivity {
         mMap.moveCamera(update);
     }
 
-    public void geoLocate(View v) {
+    public void geoLocate(View v) throws IOException{
         hideSoftKeyboard(v);
 
         EditText et = (EditText) findViewById(R.id.editText1);
@@ -117,9 +118,10 @@ public class MapsActivity extends FragmentActivity {
 
         Geocoder gc = new Geocoder(this);
         List<Address> list = gc.getFromLocationName(location,1);
+        Address add = list.get(0);
+        String locality = add.getLocality();
 
-
-        Toast.makeText(this, location, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
 
     }
 
