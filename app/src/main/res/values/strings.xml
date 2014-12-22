@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ApiMapaTest</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyBYxH4vD_XJbliNWNsbKR2bKyyZxlzkIJs</string>
+
+    <string name="seattle">Seattle</string>
+    <string name="newyork">New York</string>
+    <string name="sydney">Sydney</string>
+
+</resources>
