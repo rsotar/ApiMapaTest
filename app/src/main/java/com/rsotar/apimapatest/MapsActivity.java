@@ -8,12 +8,11 @@ import android.os.Bundle;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 
 import android.app.Dialog;
 
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -35,12 +34,9 @@ public class MapsActivity extends FragmentActivity {
     GoogleMap mMap;
 
     @SuppressWarnings("unused")
-    private static final double SEATTLE_LAT = 47.60621,
-            SEATTLE_LNG =-122.33207,
-            SYDNEY_LAT = -33.867487,
-            SYDNEY_LNG = 151.20699,
-            NEWYORK_LAT = 40.714353,
-            NEWYORK_LNG = -74.005973;
+    private static final double
+            TUCUMAN_LAT = -26.816667,
+            TUCUMAN_LNG = -65.216667;
     private static final float DEFAULTZOOM = 15;
     private static final String LOGTAG = "Maps";
 
@@ -53,7 +49,7 @@ public class MapsActivity extends FragmentActivity {
 
             if (initMap()) {
                 Toast.makeText(this, "Ready to map!", Toast.LENGTH_SHORT).show();
-                gotoLocation(SEATTLE_LAT, SEATTLE_LNG, DEFAULTZOOM);
+                gotoLocation(TUCUMAN_LAT, TUCUMAN_LNG, DEFAULTZOOM);
             }
             else {
                 Toast.makeText(this, "Map not available!", Toast.LENGTH_SHORT).show();
@@ -103,8 +99,7 @@ public class MapsActivity extends FragmentActivity {
         mMap.moveCamera(update);
     }
 
-    private void gotoLocation(double lat, double lng,
-                              float zoom) {
+    private void gotoLocation(double lat, double lng, float zoom) {
         LatLng ll = new LatLng(lat, lng);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
         mMap.moveCamera(update);
@@ -117,11 +112,32 @@ public class MapsActivity extends FragmentActivity {
         String location = et.getText().toString();
 
         Geocoder gc = new Geocoder(this);
-        List<Address> list = gc.getFromLocationName(location,1);
-        Address add = list.get(0);
-        String locality = add.getLocality();
+
+        List<Address> addresses = gc.getFromLocationName(location,5);
+        Address returnedAddress = addresses.get(0);
+
+        if (addresses != null){
+
+            StringBuilder strReturnedAddress = new StringBuilder("");
+
+            for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+            }
+
+            Log.w("My Current location address", "" + strReturnedAddress.toString());
+        }
+        else{
+            Log.w("My Current location address", "NONE !!");
+        }
+
+        String locality = returnedAddress.getLocality();
 
         Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
+
+        double lat = returnedAddress.getLatitude();
+        double lng = returnedAddress.getLongitude();
+
+        gotoLocation(lat, lng, DEFAULTZOOM);
 
     }
 
